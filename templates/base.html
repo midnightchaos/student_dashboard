@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Student-Teacher Dashboard{% endblock %}</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: system-ui, sans-serif; background: #f4f5f7; color: #1f2937; }
+    nav { background: #111827; color: #fff; padding: 14px 24px; display: flex; gap: 18px; align-items: center; }
+    nav a { color: #d1d5db; text-decoration: none; font-size: 14px; }
+    nav a:hover { color: #fff; }
+    nav .brand { font-weight: 700; color: #fff; margin-right: auto; }
+    .wrap { max-width: 960px; margin: 32px auto; padding: 0 16px; }
+    .card { background: #fff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
+    h1 { font-size: 22px; margin-bottom: 16px; }
+    h2 { font-size: 17px; margin-bottom: 10px; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { text-align: left; padding: 10px; border-bottom: 1px solid #e5e7eb; }
+    th { background: #f9fafb; }
+    .btn { display: inline-block; background: #2563eb; color: #fff; padding: 8px 14px; border-radius: 6px;
+           text-decoration: none; font-size: 14px; border: none; cursor: pointer; }
+    .btn.secondary { background: #6b7280; }
+    .btn:hover { opacity: .92; }
+    form p { margin-bottom: 14px; }
+    label { display: block; font-weight: 600; font-size: 14px; margin-bottom: 6px; }
+    input[type=text], input[type=password], input[type=email], input[type=date],
+    textarea, select, input[type=file] {
+      width: 100%; padding: 9px; border: 1px solid #d1d5db; border-radius: 6px; font: inherit;
+    }
+    textarea { resize: vertical; }
+    .msgs { list-style: none; margin-bottom: 16px; }
+    .msgs li { padding: 10px 14px; border-radius: 6px; margin-bottom: 8px; font-size: 14px; }
+    .msgs .success { background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; }
+    .msgs .error { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
+    .stats { display: flex; gap: 16px; flex-wrap: wrap; }
+    .stat { flex: 1; min-width: 140px; background: #f9fafb; border: 1px solid #e5e7eb;
+            border-radius: 8px; padding: 16px; }
+    .stat b { display: block; font-size: 26px; }
+    .muted { color: #6b7280; font-size: 13px; }
+    .badge { display: inline-block; padding: 3px 9px; border-radius: 999px; font-size: 12px; }
+    .badge.pending { background: #fef3c7; color: #92400e; }
+    .badge.submitted { background: #d1fae5; color: #065f46; }
+    ul.plain { list-style: none; }
+    ul.plain li { padding: 8px 0; border-bottom: 1px solid #e5e7eb; font-size: 14px; }
+    .actions { display: flex; gap: 10px; margin-top: 14px; }
+    .checkboxlist li, form ul li { list-style: none; padding: 6px 0; border: 0; }
+    form ul { list-style: none; }
+    form ul li input[type=checkbox] { width: auto; margin-right: 8px; }
+    .errorlist { color: #b91c1c; font-size: 13px; list-style: none; margin-bottom: 8px; }
+  </style>
+</head>
+<body>
+<nav>
+  <span class="brand">Student Dashboard</span>
+  {% if user.is_authenticated %}
+    <a href="{% url 'home' %}">Home</a>
+    {% if user.is_teacher %}
+      <a href="{% url 'teacher_dashboard' %}">Dashboard</a>
+      <a href="{% url 'teacher_students' %}">Students</a>
+      <a href="{% url 'teacher_tasks' %}">Tasks</a>
+    {% else %}
+      <a href="{% url 'student_dashboard' %}">Dashboard</a>
+      <a href="{% url 'student_tasks' %}">My Tasks</a>
+    {% endif %}
+    <span class="muted">{{ user.username }} ({{ user.role }})</span>
+    <form method="post" action="{% url 'logout' %}" style="display:inline">
+      {% csrf_token %}
+      <button class="btn secondary" type="submit">Logout</button>
+    </form>
+  {% endif %}
+</nav>
+
+<div class="wrap">
+  {% if messages %}
+    <ul class="msgs">
+      {% for message in messages %}<li class="{{ message.tags }}">{{ message }}</li>{% endfor %}
+    </ul>
+  {% endif %}
+  {% block content %}{% endblock %}
+</div>
+</body>
+</html>

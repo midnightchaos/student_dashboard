@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Students{% endblock %}
+{% block content %}
+<h1>Students</h1>
+<div class="card">
+  {% if students %}
+  <table>
+    <tr><th>#</th><th>Username</th><th>Email</th></tr>
+    {% for s in students %}
+    <tr><td>{{ forloop.counter }}</td><td>{{ s.username }}</td><td>{{ s.email|default:"-" }}</td></tr>
+    {% endfor %}
+  </table>
+  {% else %}
+  <p class="muted">No students registered yet.</p>
+  {% endif %}
+</div>
+{% endblock %}

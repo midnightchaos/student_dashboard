@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}{{ task.title }}{% endblock %}
+{% block content %}
+<h1>{{ task.title }}</h1>
+
+<div class="card">
+  <p class="muted">Due: {{ task.due_date }} &middot; Created: {{ task.created_at|date:"d M Y" }}</p>
+  <h2>Description</h2>
+  <p>{{ task.description|linebreaks }}</p>
+</div>
+
+<div class="card">
+  <h2>Submissions ({{ submitted_count }}/{{ rows|length }} submitted)</h2>
+  {% if rows %}
+  <table>
+    <tr><th>Student</th><th>Status</th><th>Answer / File</th><th>Submitted at</th></tr>
+    {% for row in rows %}
+    <tr>
+      <td>{{ row.student.username }}</td>
+      <td>
+        {% if row.submission %}
+          <span class="badge {{ row.submission.status|lower }}">{{ row.submission.status }}</span>
+        {% else %}
+          <span class="badge pending">Pending</span>
+        {% endif %}
+      </td>
+      <td>
+        {% if row.submission %}
+          {% if row.submission.file %}<a href="{{ row.submission.file.url }}">Download</a>{% endif %}
+          {{ row.submission.answer|truncatechars:60 }}
+        {% else %}-{% endif %}
+      </td>
+      <td class="muted">{{ row.submission.submitted_at|date:"d M Y H:i"|default:"-" }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+  {% else %}
+  <p class="muted">No students assigned to this task.</p>
+  {% endif %}
+</div>
+{% endblock %}

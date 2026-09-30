@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Teacher Dashboard{% endblock %}
+{% block content %}
+<h1>Teacher Dashboard</h1>
+
+<div class="card">
+  <div class="stats">
+    <div class="stat"><b>{{ tasks|length }}</b> Tasks</div>
+    <div class="stat"><b>{{ student_count }}</b> Students</div>
+    <div class="stat"><b>{{ pending_count }}</b> Pending Submissions</div>
+    <div class="stat"><b>{{ submitted_count }}</b> Submitted</div>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Recent Tasks</h2>
+  {% if tasks %}
+    <table>
+      <tr><th>Title</th><th>Due Date</th><th>Students</th></tr>
+      {% for task in tasks %}
+      <tr>
+        <td><a href="{% url 'teacher_task_detail' task.pk %}">{{ task.title }}</a></td>
+        <td>{{ task.due_date }}</td>
+        <td>{{ task.students.count }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+  {% else %}
+    <p class="muted">No tasks yet.</p>
+  {% endif %}
+  <div class="actions"><a class="btn" href="{% url 'task_create' %}">+ Create Task</a></div>
+</div>
+{% endblock %}

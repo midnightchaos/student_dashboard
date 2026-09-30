@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}{{ task.title }}{% endblock %}
+{% block content %}
+<h1>{{ task.title }}</h1>
+
+<div class="card">
+  <p class="muted">Due: {{ task.due_date }} &middot; From: {{ task.teacher.username }}</p>
+  <h2>Instructions</h2>
+  <p>{{ task.description|linebreaks }}</p>
+</div>
+
+<div class="card">
+  <h2>Your Submission</h2>
+  {% if submission %}
+    <p>Status: <span class="badge {{ submission.status|lower }}">{{ submission.status }}</span></p>
+    {% if submission.answer %}<p>{{ submission.answer|linebreaks }}</p>{% endif %}
+    {% if submission.file %}<p><a href="{{ submission.file.url }}">Download your file</a></p>{% endif %}
+    <p class="muted">Submitted at: {{ submission.submitted_at|date:"d M Y H:i" }}</p>
+  {% else %}
+    <p class="muted">You have not submitted this task yet.</p>
+  {% endif %}
+  <div class="actions">
+    <a class="btn" href="{% url 'student_task_submit' task.pk %}">
+      {% if submission %}Update Submission{% else %}Submit Task{% endif %}
+    </a>
+  </div>
+</div>
+{% endblock %}

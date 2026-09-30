@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Tasks{% endblock %}
+{% block content %}
+<h1>My Tasks</h1>
+<div class="card">
+  {% if tasks %}
+  <table>
+    <tr><th>Title</th><th>Due Date</th><th>Assigned</th><th>Created</th></tr>
+    {% for task in tasks %}
+    <tr>
+      <td><a href="{% url 'teacher_task_detail' task.pk %}">{{ task.title }}</a></td>
+      <td>{{ task.due_date }}</td>
+      <td>{{ task.students.count }}</td>
+      <td class="muted">{{ task.created_at|date:"d M Y" }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+  {% else %}
+  <p class="muted">You haven't created any tasks yet.</p>
+  {% endif %}
+  <div class="actions"><a class="btn" href="{% url 'task_create' %}">+ Create Task</a></div>
+</div>
+{% endblock %}

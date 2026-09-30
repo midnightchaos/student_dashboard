@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Create Task{% endblock %}
+{% block content %}
+<h1>Create Task</h1>
+<div class="card" style="max-width:640px;">
+  <form method="post">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    {% for field in form %}
+      <p>
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field }}
+        {{ field.errors }}
+      </p>
+    {% endfor %}
+    <button class="btn" type="submit">Assign Task</button>
+    <a class="btn secondary" href="{% url 'teacher_tasks' %}">Cancel</a>
+  </form>
+</div>
+{% endblock %}

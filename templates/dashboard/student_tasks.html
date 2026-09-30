@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}My Tasks{% endblock %}
+{% block content %}
+<h1>My Tasks</h1>
+<div class="card">
+  {% if tasks %}
+  <table>
+    <tr><th>Title</th><th>Due Date</th><th>Status</th></tr>
+    {% for task in tasks %}
+    <tr>
+      <td><a href="{% url 'student_task_detail' task.pk %}">{{ task.title }}</a></td>
+      <td>{{ task.due_date }}</td>
+      <td>
+        {% if task.pk in submitted_ids %}
+          <span class="badge submitted">Submitted</span>
+        {% else %}
+          <span class="badge pending">Pending</span>
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+  {% else %}
+  <p class="muted">No tasks assigned to you yet.</p>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Student Dashboard{% endblock %}
+{% block content %}
+<h1>Student Dashboard</h1>
+
+<div class="card">
+  <div class="stats">
+    <div class="stat"><b>{{ tasks|length }}</b> Assigned Tasks</div>
+    <div class="stat"><b>{{ pending_count }}</b> Pending</div>
+    <div class="stat"><b>{{ submitted_count }}</b> Submitted</div>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Latest Tasks</h2>
+  {% if tasks %}
+    <table>
+      <tr><th>Title</th><th>Due Date</th></tr>
+      {% for task in tasks %}
+      <tr>
+        <td><a href="{% url 'student_task_detail' task.pk %}">{{ task.title }}</a></td>
+        <td>{{ task.due_date }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+  {% else %}
+    <p class="muted">No tasks assigned to you yet.</p>
+  {% endif %}
+  <div class="actions"><a class="btn" href="{% url 'student_tasks' %}">View All Tasks</a></div>
+</div>
+{% endblock %}
